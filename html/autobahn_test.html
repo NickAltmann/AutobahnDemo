@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+    <head>
+        <script type="text/javascript" src="/include/jquery-1.11.3.js"></script>
+        <script type="text/javascript" src="/include/jquery.json-2.5.1.js"></script>
+        <script type="text/javascript" src="/include/jquery.websocket-0.0.1.js"></script>
+        <title>AutoBahn Test Demo</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>   
+	<body>
+		<script>
+			var getClientCountUrl = "http://localhost:9001/get_client_count?callback=?";			
+			function updateClientCount() {
+				$.getJSON(getClientCountUrl, function(data) {
+					$("#client_count_div").html("There are " + data.client_count + " clients connected as of " + data.time + ".");
+				});	
+			}
+			
+			function sendToServer() {
+				ws.send('message', $("#textToSend").val());						
+			}
+		
+			var ws = $.websocket("ws://127.0.0.1:9002/", {
+				open : function() {
+				},
+				events: {
+					message: function(e) { $('#content').append(e.data + '<br>') }
+				}
+			});
+		</script>
+		
+		<h1>AutoBahn Test Demo</h1>		
+		<h2>Ajax call</h2>
+		<div id="client_count_div">Click button to see client count.</div><p/>
+		<button onclick="updateClientCount()">Update Client Count</button><p/>
+		<hr/>
+		<h2>Websocket call</h2>
+		<input type="text" id="textToSend" style="width: 200px;"/><p/>
+		<button onclick="sendToServer()">Send Message</button><p/>
+		Messages received:<p/>
+		<section id="content"></section>				
+	</body>
+</html>
