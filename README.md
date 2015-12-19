@@ -1,6 +1,8 @@
 # AutobahnDemo
 Demo of using jquery to communicate with autobahn twisted webserver via web sockets and ajax.
 
+See discussion here: http://www.nickstricks.net/wp/?p=55
+
 To install you will need to:
 - Install python
 - Install twisted via pip.  If you get an error "Unable to find vcvarsall.bat" then try installing Visual Studio 2008 Express edition.
