@@ -9,24 +9,29 @@
     </head>   
 	<body>
 		<script>
-			var getClientCountUrl = "http://localhost:9001/get_client_count?callback=?";			
+			// Ajax call to get the client count.
 			function updateClientCount() {
-				$.getJSON(getClientCountUrl, function(data) {
+				$.ajax({
+					url: "http://localhost:9001/get_client_count",
+					dataType: "jsonp",
+					success: function(data) {
 					$("#client_count_div").html("There are " + data.client_count + " clients connected as of " + data.time + ".");
-				});	
+				}});	
 			}
 			
-			function sendToServer() {
-				ws.send('message', $("#textToSend").val());						
-			}
-		
-			var ws = $.websocket("ws://127.0.0.1:9002/", {
-				open : function() {
-				},
+			// Create the web socket
+			var ws = $.websocket("ws://localhost:9002/", {
 				events: {
-					message: function(e) { $('#content').append(e.data + '<br>') }
+					// Respond to income data of type "chat".
+					chat: function(e) { $('#content').append(e.data + '<br>') }
 				}
 			});
+
+			// Send data to web socket using a type of "chat".
+			function sendToServer() {
+				ws.send('chat', $("#textToSend").val());						
+			}
+		
 		</script>
 		
 		<h1>AutoBahn Test Demo</h1>		

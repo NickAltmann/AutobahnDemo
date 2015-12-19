@@ -31,7 +31,7 @@ class BroadcastServerProtocol(WebSocketServerProtocol):
             in_data = json.loads(payload.decode('utf8'))
             in_message = in_data['data']
             return_message = 'Message from %s : %s' % (self.peer, in_message)
-            return_payload = json.dumps({'type': 'message', 'data' : return_message})
+            return_payload = json.dumps({'type': 'chat', 'data' : return_message})
             self.factory.broadcast(return_payload)
 
     def onOpen(self):
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     log.startLogging(sys.stdout)
     client_tracker = ClientTracker()
 
-    # Simple file server, serving files from the current directory.
+    # Simple file server, serving files from the html directory.
     resource = File(r'.\html')
     factory = Site(resource)
     reactor.listenTCP(9000, factory)
